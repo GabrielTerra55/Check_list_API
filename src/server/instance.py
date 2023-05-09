@@ -1,0 +1,37 @@
+from flask import Flask, Blueprint
+from flask_restx import Api
+from ma import ma
+from db import db
+
+from marshmallow import ValidationError
+
+
+class Server():
+    def __init__(self):
+        self.app = Flask(__name__)
+        self.blueprint = Blueprint('api', __name__, url_prefix='/api')
+        self.api = Api(self.blueprint,
+                       doc='/docs',
+                       title='Sample Check List API'
+                       )
+
+        self.app.register_blueprint(self.blueprint)
+
+        self.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+        self.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        self.app.config['PROPAGATE_EXCEPTIONS'] = True
+
+        self.check_list_ns = self.check_list_ns()
+
+    def check_list_ns(self):
+        return self.api.namespace(name='CheckList', description='Check List related operations', path='/')
+
+    def run(self):
+        self.app.run(
+            debug=True,
+            port=5000,
+            host='localhost'
+        )
+
+
+server = Server()
