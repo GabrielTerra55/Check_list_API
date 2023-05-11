@@ -12,7 +12,7 @@ class Server():
         self.blueprint = Blueprint('api', __name__, url_prefix='/api')
         self.api = Api(self.blueprint,
                        doc='/docs',
-                       title='Sample Check List API'
+                       title='Sample To Do API'
                        )
 
         self.app.register_blueprint(self.blueprint)
@@ -21,10 +21,10 @@ class Server():
         self.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
         self.app.config['PROPAGATE_EXCEPTIONS'] = True
 
-        self.check_list_ns = self.check_list_ns()
+        self.to_do_ns = self.to_do_ns()
 
-    def check_list_ns(self):
-        return self.api.namespace(name='CheckList', description='Check List related operations', path='/')
+    def to_do_ns(self):
+        return self.api.namespace(name='To Do', description='To Do related operations', path='/')
 
     def run(self):
         self.app.run(

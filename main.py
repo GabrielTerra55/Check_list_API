@@ -3,7 +3,7 @@ from marshmallow import ValidationError
 from ma import ma
 from db import db
 
-from src.controllers.check_list import CheckList, CheckListList, check_list_ns
+from src.controllers.to_do import ToDo, ToDoList, to_do_ns
 from src.server.instance import server
 from marshmallow import ValidationError
 
@@ -19,8 +19,8 @@ def create_tables():
 def handle_validation_error(error):
     return jsonify(error.messages), 400
 
-api.add_resource(CheckList, '/check_list/<int:id>')
-api.add_resource(CheckListList, '/check_list')
+api.add_resource(ToDo, '/to_do/<int:id>')
+api.add_resource(ToDoList, '/to_do')
 
 
 if __name__ == '__main__':
