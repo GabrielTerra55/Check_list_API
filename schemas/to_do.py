@@ -6,3 +6,4 @@ class ToDoSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = ToDoModel
         load_instance = True
+        

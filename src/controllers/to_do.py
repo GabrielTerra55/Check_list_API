@@ -14,6 +14,7 @@ ITEM_NOT_FOUND = 'To Do not found.'
 to_do_schema = ToDoSchema()
 to_do_list_schema = ToDoSchema(many=True)
 
+default = {"status": "não iniciado"}
 
 class StatusEnum(Enum):
     FEITO = 'feito'
@@ -73,6 +74,8 @@ class ToDoList(Resource):
     @to_do_ns.doc('Create an Item')
     def post(self):
         to_do_json = request.get_json()
+        if not to_do_json['status']:
+            to_do_json['status'] = default.get('status')
         to_do_data = to_do_schema.load(to_do_json)
 
         to_do_data.save_to_db()
