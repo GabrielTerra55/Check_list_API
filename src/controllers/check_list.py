@@ -1,6 +1,7 @@
 from flask import request
 from flask_restx import Resource, fields
 from sqlalchemy import Enum
+from datetime import datetime
 
 from models.check_list import CheckListModel
 from schemas.check_list import CheckListSchema
@@ -46,7 +47,7 @@ class CheckList(Resource):
 
         check_list_data.name = check_list_json['name']
         check_list_data.description = check_list_json['description']
-        check_list_data.deadline = check_list_json['deadline']
+        check_list_data.deadline = datetime.strptime(check_list_json['deadline'], '%Y-%m-%dT%H:%M:%S.%fZ')
         check_list_data.status = check_list_json['status']
 
         check_list_data.save_to_db()

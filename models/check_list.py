@@ -1,6 +1,7 @@
 from db import db
 from sqlalchemy import Enum
 
+
 class CheckListModel(db.Model):
     __tablename__ = 'check_list'
 
@@ -20,7 +21,7 @@ class CheckListModel(db.Model):
     def __repr__(self):
         return f'CheckListModel(name={self.name}, description={self.description},deadline={self.deadline}, status={self.status})'
 
-    def json(self):                         
+    def json(self):
         return {
             'name': self.name,
             'description': self.description,
@@ -28,16 +29,14 @@ class CheckListModel(db.Model):
             'status': self.status
         }
 
-    
-
     @classmethod
     def find_by_id(cls, id):
         return cls.query.filter_by(id=id).first()
-    
+
     @classmethod
     def find_by_name(cls, name):
         return cls.query.filter_by(name=name).first()
-    
+
     @classmethod
     def find_by_deadline(cls, deadline):
         return cls.query.filter_by(deadline=deadline).all()
