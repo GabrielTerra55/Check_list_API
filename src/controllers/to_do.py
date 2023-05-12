@@ -32,7 +32,7 @@ item = to_do_ns.model('To Do', {
 class ToDo(Resource):
 
     def get(self, id):
-        to_do_data = ToDoModel.find_by_id(id)
+        to_do_data = ToDoModel.find_by_id(id=id)
         if to_do_data:
             return to_do_schema.dump(to_do_data)
         return {
@@ -81,3 +81,14 @@ class ToDoList(Resource):
         to_do_data.save_to_db()
 
         return to_do_schema.dump(to_do_data), 200
+
+class ToDoByName(Resource):
+    @to_do_ns.doc('Get iten by name')
+    def get(self, name):
+        to_do_data = ToDoModel.find_by_name(name=name)
+        if to_do_data:
+            return to_do_schema.dump(to_do_data)
+        return {
+            'message': ITEM_NOT_FOUND
+        }, 404
+    
