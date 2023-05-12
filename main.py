@@ -21,7 +21,7 @@ def handle_validation_error(error):
 
 api.add_resource(ToDo, '/to_do/<int:id>')
 api.add_resource(ToDoList, '/to_do')
-api.add_resource(ToDoByName, '/to_do/<string:name>')
+api.add_resource(ToDoByName, '/to_do/filter/<string:name>')
 
 
 if __name__ == '__main__':
