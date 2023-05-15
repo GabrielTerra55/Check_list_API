@@ -1,6 +1,5 @@
 from flask import request
 from flask_restx import Resource, fields
-from sqlalchemy import Enum
 from datetime import datetime
 
 from models.to_do import ToDoModel
@@ -14,18 +13,14 @@ ITEM_NOT_FOUND = 'To Do not found.'
 to_do_schema = ToDoSchema()
 to_do_list_schema = ToDoSchema(many=True)
 
-default = {"status": "não iniciado"}
+default = {"status": "nao feito"}
 
-class StatusEnum(Enum):
-    FEITO = 'feito'
-    FAZENDO = 'fazendo'
-    NAO_INICIADO = 'não iniciado'
 
 item = to_do_ns.model('To Do', {
     'name': fields.String(description='To Do name', example="Revisão do Carro"),
     'description': fields.String(description='To Do description', example="Levar o carro para a revisão do sistema de freio"),
     'deadline': fields.DateTime(description='To Do deadline', example="2024-05-12T15:03:34.901Z"),
-    'status': fields.String(description='To Do Status', example="não iniciado", enum=['feito', 'fazendo', 'não iniciado'])
+    'status': fields.String(description='To Do Status', example="nao feito", enum=["nao feito","em progresso","finalizado"])
 })
 
 

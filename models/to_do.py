@@ -9,8 +9,7 @@ class ToDoModel(db.Model):
     name = db.Column(db.String(80), nullable=False)
     description = db.Column(db.String(250), nullable=False)
     deadline = db.Column(db.DateTime, nullable=False)
-    status = db.Column(db.Enum("feito", "fazendo", "não iniciado"),
-                       default="não iniciado", nullable=False)
+    status = db.Column(db.Enum("nao feito","em progresso","finalizado", name="status_enum_type"), nullable=False)
 
     def __init__(self, name, description, deadline, status):
         self.name = name
