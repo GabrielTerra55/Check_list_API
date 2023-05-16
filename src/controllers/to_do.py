@@ -45,21 +45,20 @@ class ToDo(Resource):
         to_do_json = request.get_json()
         to_do_data.name = to_do_json['name']
         to_do_data.description = to_do_json['description']
+
         if not to_do_json['status']:
             to_do_json['status'] = default.get('status')
-        to_do_data.status = to_do_json['status']
 
         try:
             to_do_data.deadline = datetime.strptime(to_do_json['deadline'], '%Y-%m-%dT%H:%M:%S')
-        except ValueError:
-            return {"message":"Format Date is Not Valid"}, 400
+        except ValueError as value:
+            return {'message': 'Data Validation Error: {}'.format(str(value))}, 400
         
-        try:
-            to_do_data.save_to_db()
-            return to_do_schema.dump(to_do_data), 200
-
-        except ValidationError as error:
-            return {"message":"Bad Requestion"}, 400
+       
+        to_do_data.status = to_do_json['status']
+        to_do_data.save_to_db()
+        return to_do_schema.dump(to_do_data), 200                    #precisa adicionar tratamento em relação ao status que pode entrar invalido.
+        
     
     def delete(self, id):
 
