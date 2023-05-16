@@ -29,26 +29,32 @@ class ToDo(Resource):
     def get(self, id):
         to_do_data = ToDoModel.find_by_id(id=id)
         if to_do_data:
-            return to_do_schema.dump(to_do_data)
-        return {
-            'message': ITEM_NOT_FOUND
-        }, 404
+            return to_do_schema.dump(to_do_data), 200
+        
+        return ITEM_NOT_FOUND, 404
 
     @to_do_ns.expect(item)
     def put(self, id):
 
         to_do_data = ToDoModel.find_by_id(id)
+        if not to_do_data:
+            return ITEM_NOT_FOUND, 404
+
         to_do_json = request.get_json()
 
         to_do_data.name = to_do_json['name']
         to_do_data.description = to_do_json['description']
         to_do_data.deadline = datetime.strptime(to_do_json['deadline'], '%Y-%m-%dT%H:%M:%S.%fZ')
+        
+        if not to_do_json['status']:
+            to_do_json['status'] = default.get('status')
+        
         to_do_data.status = to_do_json['status']
 
         to_do_data.save_to_db()
 
         return to_do_schema.dump(to_do_data), 200
-
+    
     def delete(self, id):
 
         to_do_data = ToDoModel.find_by_id(id)
@@ -56,7 +62,7 @@ class ToDo(Resource):
             to_do_data.delete_from_db()
             return '', 204
 
-        return {'message', ITEM_NOT_FOUND}
+        return ITEM_NOT_FOUND, 404
 
 
 class ToDoList(Resource):
@@ -82,8 +88,7 @@ class ToDoByName(Resource):
     def get(self, name):
         to_do_data = ToDoModel.find_by_name(name=name)
         if to_do_data:
-            return to_do_schema.dump(to_do_data)
-        return {
-            'message': ITEM_NOT_FOUND
-        }, 404
+            return to_do_schema.dump(to_do_data), 
+
+        return ITEM_NOT_FOUND, 404
     
