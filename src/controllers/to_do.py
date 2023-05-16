@@ -21,10 +21,10 @@ default = {"status": "nao feito"}
 item = to_do_ns.model('To Do', {
     'name': fields.String(description='To Do name', example="Revisão do Carro"),
     'description': fields.String(description='To Do description', example="Levar o carro para a revisão do sistema de freio"),
-    'deadline': fields.DateTime(description='To Do deadline', example="2024-05-12T15:03:34.901Z"),
+    'deadline': fields.DateTime(description='To Do deadline', example="2024-05-12T15:03:34"),
     'status': fields.String(description='To Do Status', example="nao feito", enum=["nao feito","em progresso","finalizado"])
 })
-
+''
 
 class ToDo(Resource):
 
@@ -43,19 +43,23 @@ class ToDo(Resource):
             return ITEM_NOT_FOUND, 404
 
         to_do_json = request.get_json()
-
         to_do_data.name = to_do_json['name']
         to_do_data.description = to_do_json['description']
-        to_do_data.deadline = datetime.strptime(to_do_json['deadline'], '%Y-%m-%dT%H:%M:%S.%fZ')
-        
         if not to_do_json['status']:
             to_do_json['status'] = default.get('status')
-        
         to_do_data.status = to_do_json['status']
 
-        to_do_data.save_to_db()
+        try:
+            to_do_data.deadline = datetime.strptime(to_do_json['deadline'], '%Y-%m-%dT%H:%M:%S')
+        except ValueError:
+            return {"message":"Format Date is Not Valid"}, 400
+        
+        try:
+            to_do_data.save_to_db()
+            return to_do_schema.dump(to_do_data), 200
 
-        return to_do_schema.dump(to_do_data), 200
+        except ValidationError as error:
+            return {"message":"Bad Requestion"}, 400
     
     def delete(self, id):
 
@@ -97,4 +101,3 @@ class ToDoByName(Resource):
             return to_do_schema.dump(to_do_data), 
 
         return ITEM_NOT_FOUND, 404
-    
