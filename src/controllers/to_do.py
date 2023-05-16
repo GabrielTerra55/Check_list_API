@@ -1,6 +1,8 @@
 from flask import request
 from flask_restx import Resource, fields
 from datetime import datetime
+from marshmallow import ValidationError
+
 
 from models.to_do import ToDoModel
 from schemas.to_do import ToDoSchema
@@ -77,11 +79,15 @@ class ToDoList(Resource):
         to_do_json = request.get_json()
         if not to_do_json['status']:
             to_do_json['status'] = default.get('status')
-        to_do_data = to_do_schema.load(to_do_json)
 
-        to_do_data.save_to_db()
+        try:
+            to_do_data = to_do_schema.load(to_do_json)
+            to_do_data.save_to_db()
+            return to_do_schema.dump(to_do_data), 200
 
-        return to_do_schema.dump(to_do_data), 200
+        except ValidationError as error:
+            return {'message': 'Validation Error: {}'.format(error.messages)}, 400
+            #return {"message":"Bad Requestion"}, 400
 
 class ToDoByName(Resource):
     @to_do_ns.doc('Get iten by name')
