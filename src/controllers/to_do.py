@@ -18,12 +18,11 @@ default = {"status": "nao feito"}
 
 
 item = to_do_ns.model('To Do', {
-    'name': fields.String(description='To Do name', example="Revisão do Carro"),
-    'description': fields.String(description='To Do description', example="Levar o carro para a revisão do sistema de freio"),
+    'name': fields.String(description='To Do name', example="Revisão do Carro", max_length=80),
+    'description': fields.String(description='To Do description', example="Levar o carro para a revisão do sistema de freio", max_length=250),
     'deadline': fields.DateTime(description='To Do deadline', example="2024-05-12T15:03:34"),
     'status': fields.String(description='To Do Status', example="nao feito", enum=["nao feito","em progresso","finalizado"])
 })
-''
 
 class ToDo(Resource):
 
@@ -46,10 +45,7 @@ class ToDo(Resource):
         errors = to_do_schema.validate(to_do_json)
         if errors:
             return {'message': 'Data Validation Error: {}'.format(str(errors))}, 400
-        try:
-            to_do_data.deadline = datetime.strptime(to_do_json['deadline'], '%Y-%m-%dT%H:%M:%S')
-        except ValueError as value:
-            return {'message': 'Data Validation Error: {}'.format(str(value))}, 400
+        
         to_do_data.name = to_do_json['name']
         to_do_data.description = to_do_json['description']
         to_do_data.status = to_do_json['status']
@@ -82,14 +78,14 @@ class ToDoList(Resource):
         if not to_do_json['status']:
             to_do_json['status'] = default.get('status')
 
-        try:
-            to_do_data = to_do_schema.load(to_do_json)
-            to_do_data.save_to_db()
-            return to_do_schema.dump(to_do_data), 200
+        errors = to_do_schema.validate(to_do_json)
+        if errors:
+            return {'message': 'Data Validation Error: {}'.format(str(errors))}, 400
+        
+        to_do_data = to_do_schema.load(to_do_json)
+        to_do_data.save_to_db()
+        return to_do_schema.dump(to_do_data), 200
 
-        except ValidationError as error:
-            return {'message': 'Validation Error: {}'.format(error.messages)}, 400
-            
 class ToDoByName(Resource):
     @to_do_ns.doc('Get iten by name')
     def get(self, name):
