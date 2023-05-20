@@ -2,7 +2,7 @@ from flask import request
 from flask_restx import Resource, fields
 from datetime import datetime
 from marshmallow import ValidationError
-
+from psycopg2.errors import InvalidTextRepresentation
 
 from models.to_do import ToDoModel
 from schemas.to_do import ToDoSchema
@@ -54,10 +54,14 @@ class ToDo(Resource):
         except ValueError as value:
             return {'message': 'Data Validation Error: {}'.format(str(value))}, 400
         
+        to_do_schema.dump(to_do_data)        # testar um teste de validação de status
        
         to_do_data.status = to_do_json['status']
-        to_do_data.save_to_db()
-        return to_do_schema.dump(to_do_data), 200                    #precisa adicionar tratamento em relação ao status que pode entrar invalido.
+        try:
+            to_do_data.save_to_db()
+            return to_do_schema.dump(to_do_data), 200 
+        except :
+            return {'message': 'Data Validation Error: '}, 400       #precisa adicionar tratamento especifico ao status que pode entrar invalido.
         
     
     def delete(self, id):
