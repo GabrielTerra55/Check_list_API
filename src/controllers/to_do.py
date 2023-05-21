@@ -1,7 +1,5 @@
 from flask import request
 from flask_restx import Resource, fields
-from datetime import datetime
-from marshmallow import ValidationError
 
 from models.to_do import ToDoModel
 from schemas.to_do import ToDoSchema

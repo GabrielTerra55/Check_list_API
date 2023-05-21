@@ -1,9 +1,9 @@
-from flask import jsonify, Flask, Blueprint
+from flask import jsonify
 from marshmallow import ValidationError
 from ma import ma
 from db import db
 
-from src.controllers.to_do import ToDo, ToDoList, ToDoByName, to_do_ns
+from src.controllers.to_do import ToDo, ToDoList, ToDoByName
 from src.server.instance import server
 from marshmallow import ValidationError
 

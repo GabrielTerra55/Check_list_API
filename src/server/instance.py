@@ -1,9 +1,5 @@
 from flask import Flask, Blueprint
 from flask_restx import Api
-from ma import ma
-from db import db
-
-from marshmallow import ValidationError
 
 
 class Server():
@@ -17,7 +13,7 @@ class Server():
 
         self.app.register_blueprint(self.blueprint)
 
-        self.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost/to_do_database'
+        self.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
         self.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
         self.app.config['PROPAGATE_EXCEPTIONS'] = True
 

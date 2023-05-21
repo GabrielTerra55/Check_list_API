@@ -1,6 +1,4 @@
 from db import db
-from sqlalchemy import Enum
-
 
 class ToDoModel(db.Model):
     __tablename__ = 'ToDo'
