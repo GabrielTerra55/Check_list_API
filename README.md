@@ -1,10 +1,28 @@
 # Check_list_API
 <p>
-Neste repositorio foi feito uma aplicação RESTful com proposito de servir recursos baseado ne uma lista to-do. 'nome', 'descrição', 'deadline' e 'status' são os atributos que compõem a tarefa.
+Neste repositorio foi feito uma aplicação RESTful com proposito de servir recursos baseado ne uma lista to-do. 'nome', 'descrição', 'deadline' e 'status' são os atributos que compõem a tarefa. Foi utilizado no desenvolvimento o framework Flask, o ORM SQLAlchemy e o Serializador Marshmallow. Além da lib flask_restx que contem o Blueprint e o Swagger para a documentação.
 </p>
 <p>
  O intuito desse projeto é desenvolver bons fundamentos em algoritimos, boa pratica de programação (metodos e atributos e organização dos folders), utilização correta da classe de serialização e Model, e coerencia lógica nos endpoinst
 </p>
+<h2>Instalação</h2>
+<p>para fazer a instalação da aplicação você deve ter o python 3 instalado na sua maquin, além de ser recomendável a criação de um ambiente virtual de desenvolvimento 'venv'</p>
+Passo 1- instale as dependencias necessarias da aplicação.<br>
+ SO Windows
+	
+```
+pip install requirements.txt       
+```
+ SO Linux
+
+```
+pip install -r requirements.txt
+```
+Após essa configurações já sera possivel rodar a aplicação utilizando-o
+
+```
+python main.py
+```
 <h2>EndPoints</h2>
 <ul>
     <li> 'GET api/to_do': Retorna todas as tarefas existentes.</li>
@@ -37,7 +55,7 @@ O ID sera passado pelo Headers <br>
 Para as get e delete devera ser passado o id desejado pelo 'headers'.<br>
 Para o get com filtro, devera ser passado o nome da tarefa (name) pelo 'headers'.<br>
 
-<h2>Para mais informações a respeito dos parametros</h2>
+<h2>Para mais informações a respeito dos parâmetros</h2>
 <p>você pode acessar 'api/docs' onde tera as informações completas sobre o corpo das requisições e poderá testalas usando uma interface de requisição nativa da aplicação</p>
 
 <h2>Code Status</h2>
@@ -49,7 +67,20 @@ Para o get com filtro, devera ser passado o nome da tarefa (name) pelo 'headers'
   404: ao não encontrar um intem buscado em: GET por id, DELETE e GET por 'name' <br>
 <h2>Tratamento de Erros</h2>
 <p>
-A aplicação de forma adequada caso aconteça um erro nos paramentros, com seu 'status code' e sua 'messenge'. Isso facilitará na hora de corrigir uma solicitação mal feit ou atributos enviados não adequados.
+A aplicação tratara erros de forma adequada retornando o devido 'status code' e sua 'messenge'. Isso facilitará na hora de corrigir uma solicitação mal feita ou atributos enviados de forma erronea.
 </p>
 <p>Por Exemplo: ao fizer um POST com o atributo status fora do padrão aceito, ele ira informar de forma clara quais campos são aceitos na requisição.</p>
+{<br>
+  "name": "Revisão do Carro",<br>
+  "description": "Levar o carro para a revisão do sistema de freio",<br>
+  "deadline": "2024-05-12T15:03:34",<br>
+  "status": "fazendo"<br>
+}
+<p>
+response: 400 Undocumented Error: BAD REQUEST <br>
+{ <br>
+  "message": "Data Validation Error: {'status': ['Must be one of: nao feito, em progresso, finalizado.']}" <br>
+}
+ </p>
 
+ 
