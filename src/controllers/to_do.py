@@ -31,14 +31,14 @@ class ToDo(Resource):
         if to_do_data:
             return to_do_schema.dump(to_do_data), 200
         
-        return ITEM_NOT_FOUND, 404
+        return {"message": ITEM_NOT_FOUND}, 404
 
     @to_do_ns.expect(item)
     def put(self, id):
 
         to_do_data = ToDoModel.find_by_id(id)
         if not to_do_data:
-            return ITEM_NOT_FOUND, 404
+            return {"message": ITEM_NOT_FOUND}, 404
         to_do_json = request.get_json()
         if not to_do_json['status']:
             to_do_json['status'] = default.get('status')
@@ -62,7 +62,7 @@ class ToDo(Resource):
             to_do_data.delete_from_db()
             return '', 204
 
-        return ITEM_NOT_FOUND, 404
+        return {"message": ITEM_NOT_FOUND}, 404
 
 
 class ToDoList(Resource):
@@ -84,7 +84,7 @@ class ToDoList(Resource):
         
         to_do_data = to_do_schema.load(to_do_json)
         to_do_data.save_to_db()
-        return to_do_schema.dump(to_do_data), 200
+        return to_do_schema.dump(to_do_data), 201
 
 class ToDoByName(Resource):
     @to_do_ns.doc('Get iten by name')
