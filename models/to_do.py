@@ -36,13 +36,6 @@ class ToDoModel(db.Model):
     def find_by_name(cls, name):
         return cls.query.filter_by(name=name).first()
 
-    @classmethod
-    def find_by_deadline(cls, deadline):
-        return cls.query.filter_by(deadline=deadline).all()
-
-    @classmethod
-    def find_by_status(cls, status):
-        return cls.query.filter_by(status=status).all()
 
     @classmethod
     def find_all(cls):
